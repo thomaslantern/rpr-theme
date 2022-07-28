@@ -11,10 +11,6 @@
 	db 0,0,0,0,0,0,0
 	
 
-Cursor_X	equ $40
-Cursor_Y	equ Cursor_X+1
-
-
 vblanked	equ $7F
 
 nmihandler:
@@ -23,11 +19,11 @@ nmihandler:
 	plp
 	
 	; decrement
-	ldx $0F ;;counter for square1 note
+	ldx $0F 			; Counter for square1 note
 	dex
 	stx $0F
-	ldx $0D ;;counter for triangle note TODO: name these (aliases)
-	dex
+	ldx $0D 			; Counter for triangle note 
+	dex					
 	stx $0D
 	lda $07
 	bne nextSoundFrame
@@ -49,68 +45,67 @@ ProgramStart:
 	
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;ScreenInit
-	lda #$00
-	sta Cursor_X
-	sta Cursor_Y
-	tay
-	
-	
-;Turn ON the screen
-	lda #%00011110		;sprite enable/back enable/sprite leftstrip/backleftstrip
-	sta $2001			;PPUMASK
+
+	; Turn the screen on
+	lda #%00011110		
+	sta $2001			
 	
 	lda #$80
 	sta $2000
 
 	
-	;; note counter
+	;; Note counter
 	ldx #0
 	stx $0E
 	
 	ldx #1
-	stx $07 ;; stop playing music if disabled
+	stx $07 		; Stop playing music if disabled
 	ldx #0
-	stx $0A ;extra note jump as part has more than 256 notes
+	stx $0A 		; Extra note jump as part has more than 256 notes
 	
-	;; note duration
+	;; Note duration
 	ldx #0
 	stx $0F
 
 		
-	;; note two counter - pitch
+	;; Note two counter - pitch
 	ldx #0
 	stx $0C
 	
-	;; note two counter - length
+	;; Note two counter - length
 	ldx #0
 	stx $08
 	
-	;; note two duration
+	;; Note two duration
 	ldx #0
 	stx $0D
 	
-	;; turn on instruments
+	;; Turn on instruments
 	lda #$0F
 	sta $4015
-	;; config square 1
+	
+	;; Config square 1
 	lda #$DF
 	sta $4000
-	;; setting negate flag for sweep
+	
+	;; Setting negate flag for sweep
 	lda #$00
 	sta $4001
-	;; config square 2
+	
+	;; Config square 2
 	lda #%10110011
 	sta $4004
-	;; setting negate flag for sweep
+	
+	;; Setting negate flag for sweep
 	lda #$08
 	sta $4005
 	
-	;; turn on triangle, disable length counter
+	;; Turn on triangle, disable length counter
 	lda %10000001
 	sta $4008
 	
 	
-nextSoundFrame:	; load a new note
+nextSoundFrame:			; Load a new note
 
 ;;Square1	
 	ldx $0F
@@ -122,40 +117,40 @@ nextSoundFrame:	; load a new note
 	cpx #64
 	bne afterExtraJump
 	ldx #0
-	stx $0E ;reset basic counter
+	stx $0E 			; Reset basic counter
 	ldx $0A
 	inx
 	stx $0A
 	
 afterExtraJump:	
 	ldx $0A
-	lda extrajump,x	; get the extra amount for the jump to correct note
+	lda extrajump,x		; Get extra amount for correct jump
 	cmp #1				; 1 is code for stop music
 	bne keepPlaying
 	lda $00
 	sta $4015
 	jmp *
 keepPlaying:
-	sta $09				; store jump value
-	lda $0E 			; find actual note counter
-	clc 				; clear the carry
-	adc $09				; add a + x
-	tax					; store in x
+	sta $09				; Store jump value
+	lda $0E 			; Find actual note counter
+	clc 				; Clear the carry,
+	adc $09				; add a + x,
+	tax					; store in x.
 	
 	lda notes,x
 	sta $4002
 	lda notes+1,x
 	sta $4003
 	
-	;; load duration of note
-	lda #8;duration,x
+	;; Load duration of note
+	lda #8
 	
-	sta $0F ;; store duration
+	sta $0F 			; Store duration
 	
 	ldx $0E
 	inx
 	inx
-	stx $0E ;; increase note count
+	stx $0E 			; Increase note count
 	
 Triangle:
 	ldx $0D
@@ -176,7 +171,7 @@ playNote:
 	sta $400A
 	lda notes2+1,x
 	sta $400B
-	;; load duration of note
+	;; Load duration of note
 increment2:
 	inx
 	inx
@@ -187,22 +182,22 @@ increment2:
 	cmp #1
 	bne keepPlayingTri
 	lda #0
-	sta $07 ;; no more playing notes!
+	sta $07 		; No more playing notes!
 	jmp *
 keepPlayingTri:
-	sta $0D ;; store duration
+	sta $0D 		; Store note duration
 		
 	inx
-	stx $08 ;; increase note count - length
+	stx $08 		; Increase note count - length
 	
 ;;;;;;;;;;;;;;;;;;
 
 waitframe:
 	pha
 		lda #$00
-		sta vblanked	;zero vblanked
+		sta vblanked	; zero vblanked
 waitloop:
-		lda vblanked	;wait for the interrupt to change it
+		lda vblanked	; wait for the interrupt to change it
 		beq waitloop
 	pla
 	rts
@@ -271,7 +266,7 @@ notes2:
 duration2:	
 	db 255,255,2,64,68,24,16,16,8,40,8,8,64,72,120 ;; riff 1
 	db 64,70,26,16,16,8,40,8,8,64,72,120 ;; riff2
-	db 136,24,16,16,8,24,16,8,8,64,70,58,16,16,16,16,134,26,16,16,8,24,16,8,8 ;; iono
+	db 136,24,16,16,8,24,16,8,8,64,70,58,16,16,16,16,134,26,16,16,8,24,16,8,8
 	db 64,192,8,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6 ;; climax
 	db 255,129,64,70,26,16,16,8,40,8,8
 	db 64,70,26,16,16,8,40,8,8,48,1
