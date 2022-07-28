@@ -6,7 +6,7 @@ This project is an assembly file, which compiles to an .NES file, which plays th
 
 <h2>Building the project</h2>
 To compile the file, use VASM (url here: http://sun.hasenbraten.de/vasm/), and use the following command: <br>
-vaasm6502_oldstyle_win32.exe "rpr-theme.asm" -chklabels -nocase -Dvasm=1  -DBuildNES=1 -Fbin -o "rpr-theme.nes"
+vasm6502_oldstyle_win32.exe "rpr-theme.asm" -chklabels -nocase -Dvasm=1  -DBuildNES=1 -Fbin -o "rpr-theme.nes"
 
 <h2>What does rpr-theme.nes do? How do I play the song?</h2>
 To play the song, you will need an NES emulator to load the digital "cartridge". I use Nestopia (http://nestopia.sourceforge.net/), although any emulator should work fine. Just download an appropriate emulator, then open the file using said emulator. Make sure your speakers are on! There are currently no graphics for the project, so all you'll see is a blank(black) screen.
