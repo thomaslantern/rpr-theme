@@ -15,6 +15,6 @@ To play the song, you will need an NES emulator to load the digital "cartridge".
 Initially, when I was tasked with writing a song for the channel, I thought it would be appropriate to make it in the format of an NES file/game, as the channel reviews classic movies and games, including NES games. As I happened to be learning 6502 assembly, it was the perfect opportunity to show off what I have learned so far!
 
 <h2>Future plans for the rpr-theme</h2>
-The end-product, while reminiscent of NES music of old, is fairly simple, and only uses 2 of the NES' 4 music channels. My intent is to return to this product in the future with a fully-formed NES sound engine, so that an even more polished version of the song can be released. I will also be adding a title screen/graphics to the project.
+The end-product, while reminiscent of NES music of old, is fairly simple, and only uses 2 of the NES' 4 music channels. My intent is to return to this project in the future with a fully-formed NES sound engine, so that an even more polished version of the song can be released. I will also be adding a title screen/graphics to the project.
 
 
